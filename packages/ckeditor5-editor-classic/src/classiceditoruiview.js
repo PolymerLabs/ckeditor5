@@ -31,8 +31,8 @@ export default class ClassicEditorUIView extends BoxedEditorUIView {
 	 * in the main {@link module:editor-classic/classiceditoruiview~ClassicEditorUIView#toolbar toolbar}.
 	 * See {@link module:ui/toolbar/toolbarview~ToolbarOptions#shouldGroupWhenFull} to learn more.
 	 */
-	constructor( locale, editingView, options = {} ) {
-		super( locale );
+	constructor( locale, editorRoot, editingView, options = {} ) {
+		super( locale, editorRoot );
 
 		/**
 		 * Sticky panel view instance. This is a parent view of a {@link #toolbar}

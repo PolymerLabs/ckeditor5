@@ -22,8 +22,8 @@ export default class BoxedEditorUIView extends EditorUIView {
 	 *
 	 * @param {module:utils/locale~Locale} locale The locale instance..
 	 */
-	constructor( locale ) {
-		super( locale );
+	constructor( locale, editorRoot ) {
+		super( locale, editorRoot );
 
 		/**
 		 * Collection of the child views located in the top (`.ck-editor__top`)

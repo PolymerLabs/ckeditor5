@@ -23,7 +23,7 @@ export default class EditorUIView extends View {
 	 *
 	 * @param {module:utils/locale~Locale} [locale] The locale instance.
 	 */
-	constructor( locale ) {
+	constructor( locale, editorRoot ) {
 		super( locale );
 
 		/**
@@ -33,7 +33,7 @@ export default class EditorUIView extends View {
 		 * @readonly
 		 * @member {module:ui/viewcollection~ViewCollection} #body
 		 */
-		this.body = new BodyCollection( locale );
+		this.body = new BodyCollection( locale, editorRoot );
 	}
 
 	/**

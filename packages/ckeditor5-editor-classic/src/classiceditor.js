@@ -59,7 +59,7 @@ export default class ClassicEditor extends Editor {
 	 * {@link module:editor-classic/classiceditor~ClassicEditor.create `ClassicEditor.create()`}.
 	 * @param {module:core/editor/editorconfig~EditorConfig} config The editor configuration.
 	 */
-	constructor( sourceElementOrData, config ) {
+	constructor( sourceElementOrData, sourceRoot, config ) {
 		super( config );
 
 		if ( isElement( sourceElementOrData ) ) {
@@ -71,7 +71,7 @@ export default class ClassicEditor extends Editor {
 		this.model.document.createRoot();
 
 		const shouldToolbarGroupWhenFull = !this.config.get( 'toolbar.shouldNotGroupWhenFull' );
-		const view = new ClassicEditorUIView( this.locale, this.editing.view, {
+		const view = new ClassicEditorUIView( this.locale, sourceRoot, this.editing.view, {
 			shouldToolbarGroupWhenFull
 		} );
 
@@ -190,9 +190,9 @@ export default class ClassicEditor extends Editor {
 	 * @param {module:core/editor/editorconfig~EditorConfig} [config] The editor configuration.
 	 * @returns {Promise} A promise resolved once the editor is ready. The promise resolves with the created editor instance.
 	 */
-	static create( sourceElementOrData, config = {} ) {
+	static create( sourceElementOrData, sourceRoot, config = {} ) {
 		return new Promise( resolve => {
-			const editor = new this( sourceElementOrData, config );
+			const editor = new this( sourceElementOrData, sourceRoot, config );
 
 			resolve(
 				editor.initPlugins()

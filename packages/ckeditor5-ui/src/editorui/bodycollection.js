@@ -39,7 +39,7 @@ export default class BodyCollection extends ViewCollection {
 	 * @param {module:utils/locale~Locale} locale The {@link module:core/editor/editor~Editor editor's locale} instance.
 	 * @param {Iterable.<module:ui/view~View>} [initialItems] The initial items of the collection.
 	 */
-	constructor( locale, initialItems = [] ) {
+	constructor( locale, editorRoot, initialItems = [] ) {
 		super( initialItems );
 
 		/**
@@ -49,6 +49,7 @@ export default class BodyCollection extends ViewCollection {
 		 * @member {module:utils/locale~Locale}
 		 */
 		this.locale = locale;
+		this.editorRoot = editorRoot;
 	}
 
 	/**
@@ -80,7 +81,12 @@ export default class BodyCollection extends ViewCollection {
 
 		if ( !wrapper ) {
 			wrapper = createElement( document, 'div', { class: 'ck-body-wrapper' } );
-			document.body.appendChild( wrapper );
+
+			if ( this.editorRoot === document ) {
+				this.editorRoot.body.appendChild( wrapper );
+			} else {
+				this.editorRoot.appendChild( wrapper );
+			}
 		}
 
 		wrapper.appendChild( this._bodyCollectionContainer );
