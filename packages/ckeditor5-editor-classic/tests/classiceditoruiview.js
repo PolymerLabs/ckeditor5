@@ -22,7 +22,8 @@ describe( 'ClassicEditorUIView', () => {
 		locale = new Locale();
 		editingView = new EditingView();
 		editingViewRoot = createRoot( editingView.document );
-		view = new ClassicEditorUIView( locale, editingView );
+		// TODO: debug why document is undefined?
+		view = new ClassicEditorUIView( locale, document, editingView ); // eslint-disable-line no-undef
 		view.editable.name = editingViewRoot.rootName;
 		view.render();
 	} );
@@ -68,7 +69,8 @@ describe( 'ClassicEditorUIView', () => {
 					const locale = new Locale();
 					const editingView = new EditingView();
 					const editingViewRoot = createRoot( editingView.document );
-					const view = new ClassicEditorUIView( locale, editingView, {
+					// TODO: debug why document is undefined?
+					const view = new ClassicEditorUIView( locale, document, editingView, { // eslint-disable-line no-undef
 						shouldToolbarGroupWhenFull: true
 					} );
 

@@ -44,7 +44,7 @@ describe( 'ClassicEditor', () => {
 
 	describe( 'constructor()', () => {
 		beforeEach( () => {
-			editor = new ClassicEditor( editorElement );
+			editor = new ClassicEditor( editorElement, document );
 		} );
 
 		it( 'uses HTMLDataProcessor', () => {
@@ -78,7 +78,7 @@ describe( 'ClassicEditor', () => {
 				evt.preventDefault();
 			} );
 
-			return ClassicEditor.create( textarea, {
+			return ClassicEditor.create( textarea, document, {
 				plugins: [ Paragraph ]
 			} ).then( editor => {
 				expect( textarea.value ).to.equal( '' );
@@ -107,7 +107,7 @@ describe( 'ClassicEditor', () => {
 			describe( 'automatic toolbar items groupping', () => {
 				it( 'should be on by default', () => {
 					const editorElement = document.createElement( 'div' );
-					const editor = new ClassicEditor( editorElement );
+					const editor = new ClassicEditor( editorElement, document );
 
 					expect( editor.ui.view.toolbar.options.shouldGroupWhenFull ).to.be.true;
 
@@ -116,7 +116,7 @@ describe( 'ClassicEditor', () => {
 
 				it( 'can be disabled using config.toolbar.shouldNotGroupWhenFull', () => {
 					const editorElement = document.createElement( 'div' );
-					const editor = new ClassicEditor( editorElement, {
+					const editor = new ClassicEditor( editorElement, document, {
 						toolbar: {
 							shouldNotGroupWhenFull: true
 						}
@@ -133,7 +133,7 @@ describe( 'ClassicEditor', () => {
 	describe( 'create()', () => {
 		beforeEach( () => {
 			return ClassicEditor
-				.create( editorElement, {
+				.create( editorElement, document, {
 					plugins: [ Paragraph, Bold ]
 				} )
 				.then( newEditor => {
@@ -158,7 +158,7 @@ describe( 'ClassicEditor', () => {
 			class CustomClassicEditor extends ClassicEditor {}
 
 			return CustomClassicEditor
-				.create( editorElement, {
+				.create( editorElement, document, {
 					plugins: [ Paragraph, Bold ]
 				} )
 				.then( newEditor => {
@@ -176,7 +176,7 @@ describe( 'ClassicEditor', () => {
 			class CustomClassicEditor extends ClassicEditor {}
 			CustomClassicEditor.builtinPlugins = [ Paragraph, Bold ];
 
-			return CustomClassicEditor.create( editorElement )
+			return CustomClassicEditor.create( editorElement, document )
 				.then( newEditor => {
 					expect( newEditor.getData() ).to.equal( '<p><strong>foo</strong> bar</p>' );
 
@@ -185,7 +185,7 @@ describe( 'ClassicEditor', () => {
 		} );
 
 		it( 'allows to pass data to the constructor', () => {
-			return ClassicEditor.create( '<p>Hello world!</p>', {
+			return ClassicEditor.create( '<p>Hello world!</p>', document, {
 				plugins: [ Paragraph ]
 			} ).then( editor => {
 				expect( editor.getData() ).to.equal( '<p>Hello world!</p>' );
@@ -195,7 +195,7 @@ describe( 'ClassicEditor', () => {
 		} );
 
 		it( 'initializes with config.initialData', () => {
-			return ClassicEditor.create( editorElement, {
+			return ClassicEditor.create( editorElement, document, {
 				initialData: '<p>Hello world!</p>',
 				plugins: [ Paragraph ]
 			} ).then( editor => {
@@ -206,7 +206,7 @@ describe( 'ClassicEditor', () => {
 		} );
 
 		it( 'throws if initial data is passed in Editor#create and config.initialData is also used', done => {
-			ClassicEditor.create( '<p>Hello world!</p>', {
+			ClassicEditor.create( '<p>Hello world!</p>', document, {
 				initialData: '<p>I am evil!</p>',
 				plugins: [ Paragraph ]
 			} ).catch( () => {
@@ -217,7 +217,7 @@ describe( 'ClassicEditor', () => {
 
 		it( 'should have undefined the #sourceElement if editor was initialized with data', () => {
 			return ClassicEditor
-				.create( '<p>Foo.</p>', {
+				.create( '<p>Foo.</p>', document, {
 					plugins: [ Paragraph, Bold ]
 				} )
 				.then( newEditor => {
@@ -259,7 +259,7 @@ describe( 'ClassicEditor', () => {
 			}
 
 			return ClassicEditor
-				.create( editorElement, {
+				.create( editorElement, document, {
 					plugins: [ EventWatcher ]
 				} )
 				.then( newEditor => {
@@ -282,7 +282,7 @@ describe( 'ClassicEditor', () => {
 			}
 
 			return ClassicEditor
-				.create( editorElement, {
+				.create( editorElement, document, {
 					plugins: [ EventWatcher ]
 				} )
 				.then( newEditor => {
@@ -296,7 +296,7 @@ describe( 'ClassicEditor', () => {
 	describe( 'destroy', () => {
 		beforeEach( function() {
 			return ClassicEditor
-				.create( editorElement, { plugins: [ Paragraph ] } )
+				.create( editorElement, document, { plugins: [ Paragraph ] } )
 				.then( newEditor => {
 					editor = newEditor;
 				} );
@@ -315,7 +315,7 @@ describe( 'ClassicEditor', () => {
 			await editor.destroy();
 
 			return ClassicEditor
-				.create( '<p>Foo.</p>', {
+				.create( '<p>Foo.</p>', document, {
 					plugins: [ Paragraph, Bold ]
 				} )
 				.then( newEditor => {
@@ -344,7 +344,7 @@ describe( 'ClassicEditor', () => {
 		testMemoryUsage(
 			'should not grow on multiple create/destroy',
 			() => ClassicEditor
-				.create( document.querySelector( '#mem-editor' ), {
+				.create( document.querySelector( '#mem-editor' ), document, {
 					plugins: [ ArticlePluginSet ],
 					toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
 					image: {

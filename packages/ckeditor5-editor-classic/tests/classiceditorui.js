@@ -25,7 +25,7 @@ describe( 'ClassicEditorUI', () => {
 
 	beforeEach( () => {
 		return VirtualClassicTestEditor
-			.create( '', {
+			.create( '', document, {
 				toolbar: [ 'foo', 'bar' ]
 			} )
 			.then( newEditor => {
@@ -71,7 +71,7 @@ describe( 'ClassicEditorUI', () => {
 
 			it( 'sets view.stickyPanel#viewportTopOffset, when specified in the config', () => {
 				return VirtualClassicTestEditor
-					.create( '', {
+					.create( '', document, {
 						toolbar: {
 							viewportTopOffset: 100
 						}
@@ -113,7 +113,7 @@ describe( 'ClassicEditorUI', () => {
 		describe( 'placeholder', () => {
 			it( 'sets placeholder from editor.config.placeholder', () => {
 				return VirtualClassicTestEditor
-					.create( 'foo', {
+					.create( 'foo', document, {
 						extraPlugins: [ Paragraph ],
 						placeholder: 'placeholder-text'
 					} )
@@ -132,7 +132,7 @@ describe( 'ClassicEditorUI', () => {
 				element.setAttribute( 'placeholder', 'placeholder-text' );
 
 				return VirtualClassicTestEditor
-					.create( element, {
+					.create( element, document, {
 						extraPlugins: [ Paragraph ]
 					} )
 					.then( newEditor => {
@@ -150,7 +150,7 @@ describe( 'ClassicEditorUI', () => {
 				element.setAttribute( 'placeholder', 'placeholder-text' );
 
 				return VirtualClassicTestEditor
-					.create( element, {
+					.create( element, document, {
 						placeholder: 'config takes precedence',
 						extraPlugins: [ Paragraph ]
 					} )
@@ -168,7 +168,7 @@ describe( 'ClassicEditorUI', () => {
 			describe( '#items', () => {
 				it( 'are filled with the config.toolbar (specified as an Array)', () => {
 					return VirtualClassicTestEditor
-						.create( '', {
+						.create( '', document, {
 							toolbar: [ 'foo', 'bar' ]
 						} )
 						.then( editor => {
@@ -183,7 +183,7 @@ describe( 'ClassicEditorUI', () => {
 
 				it( 'are filled with the config.toolbar (specified as an Object)', () => {
 					return VirtualClassicTestEditor
-						.create( '', {
+						.create( '', document, {
 							toolbar: {
 								items: [ 'foo', 'bar' ],
 								viewportTopOffset: 100
@@ -202,7 +202,7 @@ describe( 'ClassicEditorUI', () => {
 		} );
 
 		it( 'initializes keyboard navigation between view#toolbar and view#editable', () => {
-			return VirtualClassicTestEditor.create( '' )
+			return VirtualClassicTestEditor.create( '', document )
 				.then( editor => {
 					const ui = editor.ui;
 					const view = ui.view;
@@ -227,7 +227,7 @@ describe( 'ClassicEditorUI', () => {
 
 	describe( 'destroy()', () => {
 		it( 'detaches the DOM root then destroys the UI view', () => {
-			return VirtualClassicTestEditor.create( '' )
+			return VirtualClassicTestEditor.create( '', document )
 				.then( newEditor => {
 					const destroySpy = sinon.spy( newEditor.ui.view, 'destroy' );
 					const detachSpy = sinon.spy( newEditor.editing.view, 'detachDomRoot' );
@@ -246,7 +246,7 @@ describe( 'ClassicEditorUI', () => {
 			domElement.setAttribute( 'data-baz', 'qux' );
 			domElement.classList.add( 'foo-class' );
 
-			return VirtualClassicTestEditor.create( domElement )
+			return VirtualClassicTestEditor.create( domElement, document )
 				.then( newEditor => {
 					return newEditor.destroy()
 						.then( () => {
@@ -305,14 +305,14 @@ function viewCreator( name ) {
 }
 
 class VirtualClassicTestEditor extends VirtualTestEditor {
-	constructor( sourceElementOrData, config ) {
+	constructor( sourceElementOrData, editorRoot, config ) {
 		super( config );
 
 		if ( isElement( sourceElementOrData ) ) {
 			this.sourceElement = sourceElementOrData;
 		}
 
-		const view = new ClassicEditorUIView( this.locale, this.editing.view );
+		const view = new ClassicEditorUIView( this.locale, editorRoot, this.editing.view );
 		this.ui = new ClassicEditorUI( this, view );
 
 		this.ui.componentFactory.add( 'foo', viewCreator( 'foo' ) );
@@ -325,9 +325,9 @@ class VirtualClassicTestEditor extends VirtualTestEditor {
 		return super.destroy();
 	}
 
-	static create( sourceElementOrData, config ) {
+	static create( sourceElementOrData, editorRoot, config ) {
 		return new Promise( resolve => {
-			const editor = new this( sourceElementOrData, config );
+			const editor = new this( sourceElementOrData, editorRoot, config );
 
 			resolve(
 				editor.initPlugins()
