@@ -30,9 +30,9 @@ export default function clickOutsideHandler( { emitter, activator, callback, con
 			return;
 		}
 
+		const path = domEvt.composedPath !== undefined ? domEvt.composedPath() : [];
 		for ( const contextElement of contextElements ) {
-			if ( contextElement.contains( domEvt.target ) ||
-						( 'composedPath' in domEvt && domEvt.composedPath().includes( contextElement ) ) ) {
+			if ( contextElement.contains( domEvt.target ) || path.includes( contextElement ) ) {
 				return;
 			}
 		}
