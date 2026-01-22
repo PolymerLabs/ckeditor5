@@ -23,7 +23,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-engine": "^21.0.0",
     "@ckeditor/ckeditor5-utils": "^21.0.0",
-    "lodash-es": "^4.17.15"
+    "lodash-es": "^4.17.23"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-autoformat": "^21.0.0",
